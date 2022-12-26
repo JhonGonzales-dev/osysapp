@@ -37,7 +37,7 @@ class EmpleadoProvider extends ChangeNotifier {
       status = EmpleadoStatus.loaded;
       notifyListeners();
 
-      _customsnackBar("Datos guardados");
+      await _customsnackBar("Datos guardados");
     } catch (e) {
       status = EmpleadoStatus.error;
       notifyListeners();
@@ -85,7 +85,7 @@ class EmpleadoProvider extends ChangeNotifier {
       status = EmpleadoStatus.loaded;
       notifyListeners();
 
-      _customsnackBar("Datos actualizados");
+      await _customsnackBar("Datos actualizados");
     } catch (e) {
       status = EmpleadoStatus.error;
       notifyListeners();
@@ -102,19 +102,19 @@ class EmpleadoProvider extends ChangeNotifier {
       await DBProvider.db.deleteEmpleado(id);
       status = EmpleadoStatus.loaded;
       notifyListeners();
-      _customsnackBar("empleado eliminado");
+      await _customsnackBar("empleado eliminado");
     } catch (e) {
       status = EmpleadoStatus.error;
       notifyListeners();
     }
   }
 
-  void _customsnackBar(String text) async {
-    final navigatorKey = NavigationService.navigatorKey;
+  Future<void> _customsnackBar(String text) async {
+    var navigatorKey = NavigationService.navigatorKey;
     ScaffoldMessenger.of(navigatorKey.currentState!.context)
         .showSnackBar(SnackBar(content: Text(text)));
 
-    await Future.delayed(const Duration(seconds: 1));
+    await cargarEmpleados();
     NavigationService.popTo();
   }
 
